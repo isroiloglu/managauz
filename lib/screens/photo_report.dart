@@ -69,71 +69,75 @@ class _PhotoReportState extends State<PhotoReport> {
 
     try {
       for (int i = 0; i < images.length; i++) {
-        FormData formData = FormData.fromMap({
-          'id': customerId,
-          'image': await MultipartFile.fromFile(
-            images[i].path,
-            // filename: fileName,
-            // contentType: MediaType("image", fileName.split(".").last),
-          ),
-          'type': photoTypeList[i],
-        });
-        response = await dio
-            .post(
-          media_url + photoReportUrl,
-          data: formData,
-          options: Options(
-            method: 'POST',
-            headers: <String, String>{"Authorization": "Bearer ${token}"},
-            responseType: ResponseType.json,
-            followRedirects: false,
-            validateStatus: (status) {
-              return status! < 500;
-            },
-          ),
-        )
-            .timeout(Duration(seconds: 20), onTimeout: () async {
-          var fotoModel = FotoHiveModel(
-              type: photoTypeList[i], images: images[i].path, id: customerId);
-          box.add(fotoModel);
-          var n = box.getAt(i);
-          print(n?.images);
-          Fluttertoast.showToast(
-              msg: "Hisobot tugatilmadi!",
-
-              ///
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black45,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          Navigator.pop(context);
-
-          return response1!;
-        }).then((response) {
-          if (response.statusCode == 200) {
-            if (box.isNotEmpty) {
-              box.deleteAt(i);
-              images.removeAt(i);
-              print(box.length);
-            }
-            Fluttertoast.showToast(
-                msg: "Hisobot muvaffaqiyatli tugatildi!",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.black45,
-                textColor: Colors.white,
-                fontSize: 16.0);
-            Navigator.pop(context);
-            // return;
-          }
-          print('Data ************${response.data}');
-          print('Response------------>>$response');
-        }).catchError((error) => print('Error-------->>$error'));
+        // FormData formData = FormData.fromMap({
+        //   'id': customerId,
+        //   'image': await MultipartFile.fromFile(
+        //     images[i].path,
+        //     // filename: fileName,
+        //     // contentType: MediaType("image", fileName.split(".").last),
+        //   ),
+        //   'type': photoTypeList[i],
+        // });
+        var fotoModel = FotoHiveModel(
+            type: photoTypeList[i], images: images[i].path, id: customerId);
+        box.add(fotoModel);
+        var n = box.getAt(i);
+        print(n?.images);
+        Fluttertoast.showToast(
+            msg: "Hisobot muvaffaqiyatli saqlandi!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black45,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        // response = await dio
+        //     .post(
+        //   media_url + photoReportUrl,
+        //   data: formData,
+        //   options: Options(
+        //     method: 'POST',
+        //     headers: <String, String>{"Authorization": "Bearer ${token}"},
+        //     responseType: ResponseType.json,
+        //     followRedirects: false,
+        //     validateStatus: (status) {
+        //       return status! < 500;
+        //     },
+        //   ),
+        // )
+        //     .then((response) {
+        //   if (response.statusCode == 200) {
+        //     if (box.isNotEmpty) {
+        //       box.deleteAt(i);
+        //       images.removeAt(i);
+        //       print(box.length);
+        //     }
+        //     Fluttertoast.showToast(
+        //         msg: "Hisobot muvaffaqiyatli tugatildi!",
+        //         toastLength: Toast.LENGTH_SHORT,
+        //         gravity: ToastGravity.CENTER,
+        //         timeInSecForIosWeb: 1,
+        //         backgroundColor: Colors.black45,
+        //         textColor: Colors.white,
+        //         fontSize: 16.0);
+        //     Navigator.pop(context);
+        //     // return;
+        //   }
+        //   print('Data ************${response.data}');
+        //   print('Response------------>>$response');
+        // }).catchError((error) => print('Error-------->>$error'));
       }
+      Navigator.pop(context);
+
     } catch (e) {
+      Fluttertoast.showToast(
+          msg: "Hisobotni saqlashda muammo sodir bo'ldi qayta urunib ko'ring!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
       print(e.toString());
     }
   }

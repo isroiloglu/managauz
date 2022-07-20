@@ -153,27 +153,27 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                     )
-                        .timeout(Duration(seconds: 20),
-                            onTimeout: () async {
+                        .timeout(Duration(seconds: 20), onTimeout: () async {
                       Fluttertoast.showToast(
-                          msg: "Hisobot tugatilmadi!",
-
-                          ///
+                          msg:
+                              "Hisobotni yuklashda xatolik,iltimos qayta urinib ko'ring!",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.black45,
+                          backgroundColor: Colors.red,
                           textColor: Colors.white,
                           fontSize: 16.0);
-                      Navigator.pop(context);
                       return response1!;
                     }).then((response) {
                       if (response.statusCode == 200) {
                         if (box.isNotEmpty) {
+                          print('WORKED HERE 1');
                           box.delete(box.keys.first);
                           setState(() {});
                           print(box.length);
                         } else if (box.isEmpty) {
+                          print('WORKED HERE 2');
+
                           Fluttertoast.showToast(
                               msg: "Muvaffaqiyatli yakunlandi!",
                               toastLength: Toast.LENGTH_SHORT,
